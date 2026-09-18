@@ -115,29 +115,29 @@ Refer to [references/foundational-engineering-principles.md](./references/founda
 
 ---
 
-## Detailed Rules Directory
+## Detailed Rules Directory (Progressive Disclosure)
 
-For granular rules across the 10 core NestJS categories, refer to [`rules/`](./rules/):
+When implementing or reviewing specific areas, inspect only the matching rule files on-demand:
 
-- **Architecture (`arch-`):** Circular deps, feature modules, module sharing, single responsibility, repository pattern, event-driven decoupling.
-- **Dependency Injection (`di-`):** Avoid service locator, ISP, LSP, constructor injection, scopes, interface tokens.
-- **Error Handling (`error-`):** Exception filters, HTTP exceptions, async error handling.
-- **Security (`security-`):** JWT auth, rate limiting, output sanitization, guards, input validation.
-- **Performance (`perf-`):** Async hooks, caching, database query optimization, lazy loading.
-- **Testing (`test-`):** Supertest E2E, mock external services, testing module.
-- **Database & ORM (`db-`):** Transactions, N+1 query avoidance, migrations.
-- **API Design (`api-`):** DTO serialization, interceptors, API versioning, pipes.
-- **Microservices (`micro-`):** Message patterns, health checks, background queues.
-- **DevOps (`devops-`):** Structured logging, ConfigModule, graceful shutdown.
+- **Architecture (`arch-`):** [Avoid Circular Deps](./rules/arch-avoid-circular-deps.md) | [Feature Modules](./rules/arch-feature-modules.md) | [Module Sharing](./rules/arch-module-sharing.md) | [Single Responsibility](./rules/arch-single-responsibility.md)
+- **Dependency Injection (`di-`):** [Avoid Service Locator](./rules/di-avoid-service-locator.md) | [Constructor Injection](./rules/di-prefer-constructor-injection.md) | [Provider Scopes](./rules/di-scope-awareness.md) | [Interface Tokens](./rules/di-use-interfaces-tokens.md) | [ISP](./rules/di-interface-segregation.md) | [LSP](./rules/di-liskov-substitution.md)
+- **Error Handling (`error-`):** [Exception Filters](./rules/error-use-exception-filters.md) | [HTTP Exceptions](./rules/error-throw-http-exceptions.md) | [Async Errors](./rules/error-handle-async-errors.md)
+- **Security (`security-`):** [Validate All Input](./rules/security-validate-all-input.md) | [Use Guards](./rules/security-use-guards.md) | [JWT Auth](./rules/security-auth-jwt.md) | [Rate Limiting](./rules/security-rate-limiting.md) | [Sanitize Output](./rules/security-sanitize-output.md)
+- **Performance (`perf-`):** [Use Caching](./rules/perf-use-caching.md) | [Optimize Database](./rules/perf-optimize-database.md) | [Lazy Loading](./rules/perf-lazy-loading.md) | [Async Hooks](./rules/perf-async-hooks.md)
+- **Database & ORM (`db-`):** [Use Transactions](./rules/db-use-transactions.md) | [Avoid N+1 Queries](./rules/db-avoid-n-plus-one.md) | [Use Migrations](./rules/db-use-migrations.md)
+- **API Design (`api-`):** [DTO Serialization](./rules/api-use-dto-serialization.md) | [Use Pipes](./rules/api-use-pipes.md) | [Use Interceptors](./rules/api-use-interceptors.md) | [API Versioning](./rules/api-versioning.md)
+- **Testing (`test-`):** [Supertest E2E](./rules/test-e2e-supertest.md) | [Use TestingModule](./rules/test-use-testing-module.md) | [Mock External Services](./rules/test-mock-external-services.md)
+- **Microservices (`micro-`):** [Message Patterns](./rules/micro-use-patterns.md) | [Health Checks](./rules/micro-use-health-checks.md) | [Queues](./rules/micro-use-queues.md)
+- **DevOps (`devops-`):** [ConfigModule](./rules/devops-use-config-module.md) | [Structured Logging](./rules/devops-use-logging.md) | [Graceful Shutdown](./rules/devops-graceful-shutdown.md)
 
 ---
 
 ## Verification Checklist
 
-Always run the full quality audit before merging code changes:
+Always run the full quality audit before completing tasks or merging code:
 
 - Refer to [references/verification-checklist.md](./references/verification-checklist.md) for the 9-tier audit checklist.
-- Run the automated static audit:
+- Run the automated static audit (supports `--strict` to return non-zero exit code on critical findings):
   ```bash
-  ./skills/nestjs/scripts/audit-nestjs.sh src/
+  ./scripts/audit-nestjs.sh src/ --strict
   ```

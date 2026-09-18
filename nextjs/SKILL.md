@@ -1,6 +1,6 @@
 ---
 name: nextjs
-description: Comprehensive performance optimization, Core Web Vitals remediation, and code quality engineering for Next.js and React applications. Use when asked to optimize React/Next.js performance, eliminate waterfalls, reduce bundle size, fix slow routes, optimize re-renders or hydration, improve Core Web Vitals (LCP, INP, CLS), optimize Vercel compute costs and caching, audit web performance budgets, or review UI code against Web Interface Guidelines. Triggers on "optimize Next.js", "React performance", "fix LCP", "reduce CLS", "improve INP", "speed up web", "reduce bundle size", "audit website performance", "Vercel cost optimization", or "review React code".
+description: Comprehensive performance optimization, Core Web Vitals remediation, Server Actions engineering, and code quality for Next.js (14/15) and React (18/19) applications. Use when asked to optimize React/Next.js performance, eliminate waterfalls, reduce bundle size, fix slow routes, optimize re-renders or hydration, handle Server Actions and mutations, migrate to Next.js 15 async request APIs, improve Core Web Vitals (LCP, INP, CLS), optimize Vercel compute costs and caching, audit web performance budgets, or review UI code against Web Interface Guidelines. Triggers on "optimize Next.js", "React performance", "fix LCP", "reduce CLS", "improve INP", "speed up web", "reduce bundle size", "audit website performance", "Vercel cost optimization", "Next.js 15", "Server Actions", or "review React code".
 license: MIT
 metadata:
   version: "1.0.0"
@@ -123,7 +123,12 @@ Refer to [references/react-best-practices.md](./references/react-best-practices.
   - **Sequence Verifiable Units:** Decompose multi-step work into atomic before/after brackets (red-to-green per unit); stack commits to prove correctness.
   - **Subtract Before You Add:** Remove dead code, obsolete component variants, and redundant validators before constructing new features.
   - **Type-System Discipline:** Treat TypeScript as a proof assistant; construct illegal states away; brand entity IDs; parse boundaries with Zod; enforce `never` exhaustiveness.
-  - **Migrate Callers Then Delete Legacy APIs:** When replacing internal hooks, components, or utilities, migrate all callers and delete the old API in the same wave.
+- **Golden Rule 8: Server Actions & Next.js 15 Async Request Standards:**
+  - Refer to [references/server-actions-and-mutations.md](./references/server-actions-and-mutations.md).
+  - **Await Request APIs in Next.js 15:** In Next.js 15, `cookies()`, `headers()`, `params`, and `searchParams` are Promises. Always `await` them.
+  - **Structured Action Returns:** Never throw raw errors for predictable form validation failures in Server Actions. Return standardized shapes: `{ success: true, data } | { success: false, errors }`.
+  - **The Redirect Trap:** Never call `redirect()` inside a `try...catch` block without rethrowing it, as `redirect()` relies on throwing a `NEXT_REDIRECT` error to execute.
+  - **React 19 Form State:** Use `useActionState` and `useOptimistic` instead of deprecated `useFormState`.
 
 - **Eliminate Waterfalls (Critical):**
   - Replace sequential `await` with `Promise.all()` for independent calls.
@@ -166,6 +171,7 @@ Refer to [references/vercel-optimization.md](./references/vercel-optimization.md
 
 Read these reference files progressively when executing targeted phases:
 
+- [`references/server-actions-and-mutations.md`](./references/server-actions-and-mutations.md): Server Actions error protocol, Next.js 15 async request APIs, React 19 `useActionState`.
 - [`references/react-best-practices.md`](./references/react-best-practices.md): The 70 prioritized Vercel rules (waterfalls, bundle, server vs client, rerenders).
 - [`references/typescript-best-practices.md`](./references/typescript-best-practices.md): TypeScript discipline, discriminated unions, branded types, and schema validation.
 - [`references/architecture-and-code-walkthrough.md`](./references/architecture-and-code-walkthrough.md): Architectural exploration, execution flow tracing, and component/layer placement decisions.
@@ -176,3 +182,12 @@ Read these reference files progressively when executing targeted phases:
 - [`references/vercel-optimization.md`](./references/vercel-optimization.md): Observability-first cost reduction, fluid compute, and caching architecture.
 - [`references/web-interface-guidelines.md`](./references/web-interface-guidelines.md): UI/UX consistency, interaction feedback, and design quality standards.
 - [`references/verification-checklist.md`](./references/verification-checklist.md): Pre-release audit checklist and verification test suite.
+
+---
+
+## Verification & Audit
+
+Before completing changes, run the automated static audit (supports `--strict` for CI/agent loops):
+```bash
+./scripts/audit-performance.sh src/ --strict
+```
