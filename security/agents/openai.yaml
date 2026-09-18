@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Red Teaming"
+  short_description: "Run authorized red-team tests on AI agents"
+  default_prompt: "Use $agent-red-teaming to create and execute an authorized, evidence-based security test plan for this AI agent."
